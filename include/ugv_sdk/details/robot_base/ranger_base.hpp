@@ -50,6 +50,20 @@ class RangerBase : public AgilexBase<ProtocolV2Parser>, public RangerInterface {
     AgilexBase<ProtocolV2Parser>::DisableLightControl();
   }
 
+  // reset robot state
+  void ResetRobotState() override {
+    // construct message
+    AgxMessage msg;
+    msg.type = AgxMsgStateResetConfig;
+    msg.body.state_reset_config_msg.error_clear_byte = 0x00; // clear all non critical
+
+    // encode msg to can frame and send to bus
+    if (can_ != nullptr && can_->IsOpened()) {
+      can_frame frame;
+      if (parser_.EncodeMessage(&msg, &frame)) can_->SendFrame(frame);
+    }
+  }
+
   // get robot state
   RangerCoreState GetRobotState() override {
     auto state = AgilexBase<ProtocolV2Parser>::GetRobotCoreStateMsgGroup();
