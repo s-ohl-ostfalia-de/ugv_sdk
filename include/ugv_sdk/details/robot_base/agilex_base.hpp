@@ -288,15 +288,9 @@ class AgilexBase : public RobotCommonInterface {
     std::lock_guard<std::mutex> guard(core_state_mtx_);
     switch (status_msg.type) {
       case AgxMsgSystemState: {
-        std::cout << "system status feedback received" << std::endl;
+        // std::cout << "system status feedback received" << std::endl;
         core_state_msgs_.time_stamp = SdkClock::now();
         core_state_msgs_.system_state = status_msg.body.system_state_msg;
-        std::cout << "system status data " << 
-  core_state_msgs_.system_state.vehicle_state << " " << 
-  core_state_msgs_.system_state.control_mode<< " " << 
-  core_state_msgs_.system_state.battery_voltage<< " " << 
-  core_state_msgs_.system_state.error_code<< " " << 
-  core_state_msgs_.system_state.error_code2<<        std::endl;
         break;
       }
       case AgxMsgMotionState: {
